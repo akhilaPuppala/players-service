@@ -8,31 +8,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "player_details")
+@Table(name = "players")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Player {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "player_id")
+    @Column(name = "id")
     private Long id;
 
-
-    @Column(unique = true ,name="user_id")
-    private Long userId;
-
-
-    @Column(name = "player_name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "player_age")
+    @Column(name = "age", nullable = false)
     private Integer age;
-    @Column(name = "player_gender")
-    private String gender;
-    @Column(name = "player_type")
-    private String playerType;
 
-    // Getters and Setters
+    @Column(name = "role", nullable = false)
+    private String role; // e.g., Batsman, Bowler, All-rounder
+
+    @Column(name = "country", nullable = false)
+    private String country;
 }
-
