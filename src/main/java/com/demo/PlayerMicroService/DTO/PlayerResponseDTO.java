@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class PlayerResponseDTO {
-    private Long id;
+    private int id;
     private String name;
-    private Integer age;
-    private String role;
+    private int age;
+    private String playerRole;
     private String country;
 }
