@@ -1,88 +1,67 @@
 package com.demo.PlayerMicroService.Controller;
 
 
-import com.demo.PlayerMicroService.DTO.PlayerRequestDTO;
-import com.demo.PlayerMicroService.DTO.PlayerResponseDTO;
-import com.demo.PlayerMicroService.DTO.PlayerStatsDTO;
-import com.demo.PlayerMicroService.Service.PlayerService;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@Slf4j
+import com.demo.PlayerMicroService.DTO.PlayerCreateRequest;
+import com.demo.PlayerMicroService.Entity.Player;
+import com.demo.PlayerMicroService.Service.PlayerService;
 
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
 
-    @Autowired
-    private PlayerService playerService;
+	    @Autowired
+	    private PlayerService playerService;
 
-    @GetMapping
-    public List<PlayerResponseDTO> getAllPlayers() {
-        return playerService.getAllPlayers();
-    }
+	    // Create or Update a Player
+	    @PostMapping("/create")
+	    public void createPlayer(@RequestBody PlayerCreateRequest request) {
+	        Player player = new Player();
+	        player.setUserId(request.getUserId());
+	        player.setName(request.getName());
+	        // Initialize other fields with default values or leave null
+	        player.setAge(0); // Default age
+	        player.setGender(null); // Gender not provided yet
+	        player.setPlayerType(null); // Player type not provided yet
+	        playerService.savePlayer(player);
+	    }
 
+	    // Get all Players
+	    @GetMapping("/all")
+	    public ResponseEntity<List<Player>> getAllPlayers() {
+	        List<Player> players = playerService.getAllPlayers();
+	        return ResponseEntity.ok(players);
+	    }
 
+	    // Get a Player by ID
+	    @GetMapping("/{id}")
+	    public ResponseEntity<Player> getPlayerById(@PathVariable int id) {
+	        Optional<Player> player = playerService.getPlayerById(id);
+	        return player.map(ResponseEntity::ok)
+	                .orElse(ResponseEntity.notFound().build());
+	    }
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<PlayerResponseDTO> updatePlayer(@PathVariable Long id, @RequestBody PlayerRequestDTO requestDTO) {
-        PlayerResponseDTO responseDTO = playerService.updatePlayer(id, requestDTO);
-        return responseDTO != null ? ResponseEntity.ok(responseDTO) : ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
-        playerService.deletePlayer(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}/stats")
-    public ResponseEntity<PlayerStatsDTO> getPlayerStats(@PathVariable Long id) {
-        PlayerStatsDTO statsDTO = playerService.getPlayerStats(id);
-        return statsDTO != null ? ResponseEntity.ok(statsDTO) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createPlayer(@RequestBody PlayerRequestDTO requestDTO) {
-        try {
-            log.info("Creating new player: {}", requestDTO);
-            PlayerResponseDTO player = playerService.createPlayer(requestDTO);
-            return ResponseEntity.ok(player);
-        } catch (RuntimeException e) {
-            log.error("Error creating player: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            log.error("Unexpected error creating player: {}", e.getMessage());
-            return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Internal server error"));
-        }
-    }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long id) {
-        try {
-            log.info("Fetching player with ID: {}", id);
-            PlayerResponseDTO player = playerService.getPlayerById(id);
-            if (player != null) {
-                return ResponseEntity.ok(player);
-            }
-            return ResponseEntity.status(404)
-                    .body(Map.of("error", "Player not found with ID: " + id));
-        } catch (Exception e) {
-            log.error("Error fetching player: {}", e.getMessage());
-            return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Internal server error"));
-        }
-    }
+	    // Delete a Player by ID
+	    @DeleteMapping("/{id}")
+	    public ResponseEntity<Void> deletePlayerById(@PathVariable int id) {
+	        Optional<Player> player = playerService.getPlayerById(id);
+	        if (player.isPresent()) {
+	            playerService.deletePlayerById(id);
+	            return ResponseEntity.noContent().build();
+	        } else {
+	            return ResponseEntity.notFound().build();
+	        }
+	    }
 }
