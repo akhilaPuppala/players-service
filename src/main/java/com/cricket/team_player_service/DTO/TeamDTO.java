@@ -1,4 +1,4 @@
-package com.demo.PlayerMicroService.DTO;
+package com.cricket.team_player_service.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data 
-public class PlayerCreateRequest {
+@Data
+public class TeamDTO {
 	
-	private int userId;
+	private int id;
     private String name;
+    private int bookingId;
 
 }

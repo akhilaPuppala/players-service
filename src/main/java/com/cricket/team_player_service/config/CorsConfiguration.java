@@ -1,5 +1,4 @@
-package com.demo.PlayerMicroService.config;
-
+package com.cricket.team_player_service.config;
 
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
