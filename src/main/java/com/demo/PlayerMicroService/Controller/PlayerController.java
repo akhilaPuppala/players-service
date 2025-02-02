@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,8 @@ import com.demo.PlayerMicroService.Entity.Player;
 import com.demo.PlayerMicroService.Service.PlayerService;
 
 @RestController
-@RequestMapping("/api/players")
+@RequestMapping("/api/players") 
+@CrossOrigin("*")
 public class PlayerController {
 
 	    @Autowired
@@ -43,6 +45,11 @@ public class PlayerController {
 	    public ResponseEntity<List<Player>> getAllPlayers() {
 	        List<Player> players = playerService.getAllPlayers();
 	        return ResponseEntity.ok(players);
+	    }
+	    
+	    @GetMapping("/playerId/{userId}")
+	    public Integer getPlayerId(@PathVariable int userId) {
+	        return playerService.getPlayerIdByUserId(userId);
 	    }
 
 	    // Get a Player by ID

@@ -15,6 +15,8 @@ public class PlayerService {
 
 	@Autowired
     private PlayerRepository playerRepository;
+	
+
 
     // Create or Update a Player
     public Player savePlayer(Player player) {
@@ -34,6 +36,11 @@ public class PlayerService {
     // Delete a Player by ID
     public void deletePlayerById(int id) {
         playerRepository.deleteById(id);
+    }
+
+    public Integer getPlayerIdByUserId(int userId) {
+        Optional<Player> player = playerRepository.findByUserId(userId);
+        return player.map(Player::getId).orElse(null);
     }
 }
 
