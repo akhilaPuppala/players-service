@@ -1,10 +1,8 @@
 package com.demo.PlayerMicroService.Repository;
 
-import com.demo.PlayerMicroService.Entity.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.demo.PlayerMicroService.Entity.Player;
 public interface PlayerRepository extends JpaRepository<Player, Integer> {
-    Optional<Player> findById(int id);
+    Player findByUserId(int userId);
 }

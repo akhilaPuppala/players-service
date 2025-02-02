@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.demo.PlayerMicroService.DTO.PlayerCreateRequest;
 import com.demo.PlayerMicroService.Entity.Player;
 import com.demo.PlayerMicroService.Service.PlayerService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
@@ -64,4 +66,8 @@ public class PlayerController {
 	            return ResponseEntity.notFound().build();
 	        }
 	    }
+		@GetMapping("/player-id/{userId}")
+    	public int getPlayerIdByUserId(@PathVariable int userId) {
+        	return playerService.getPlayerIdByUserId(userId);
+    }
 }

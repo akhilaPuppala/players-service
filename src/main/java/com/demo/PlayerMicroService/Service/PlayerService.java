@@ -35,6 +35,19 @@ public class PlayerService {
     public void deletePlayerById(int id) {
         playerRepository.deleteById(id);
     }
+
+    public int getPlayerIdByUserId(int userId) {
+        // Find the player by userId
+        Player player = playerRepository.findByUserId(userId);
+        
+        // Check if player is found and return player_id
+        if (player != null) {
+            return player.getId();
+        } else {
+            // If no player is found, you can throw an exception or return a default value
+            throw new RuntimeException("Player not found for userId: " + userId);
+        }
+    }
 }
 
 

@@ -2,6 +2,7 @@ package com.demo.PlayerMicroService.Entity;
 
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,9 @@ public class Player {
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int id;
-	    private int userId;
+
+		@Column(name = "user_id")
+        private int userId;
 	    private String name;
 	    private int age;
 	    private String gender;
